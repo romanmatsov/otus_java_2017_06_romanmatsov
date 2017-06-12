@@ -41,33 +41,72 @@
     <build>
         <finalName>${project.name}</finalName>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.4.1</version>
-                <configuration>
-                    <!-- get all project dependencies -->
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                    <!-- MainClass in mainfest make a executable jar -->
-                    <archive>
-                        <manifest>
-                            <mainClass>com.romanmatsov.homework1.Main</mainClass>
-                        </manifest>
-                    </archive>
 
-                </configuration>
+            <plugin>
+                <groupId>com.github.wvengen</groupId>
+                <artifactId>proguard-maven-plugin</artifactId>
+                <version>2.0.13</version>
                 <executions>
                     <execution>
-                        <id>make-assembly</id>
-                        <!-- bind to the packaging phase -->
+                        <id>obfuscation-packaging</id>
                         <phase>package</phase>
                         <goals>
-                            <goal>single</goal>
+                            <goal>proguard</goal>
                         </goals>
+                        <configuration>
+                            <proguardVersion>5.3.3</proguardVersion>
+                            <obfuscate>true</obfuscate>
+                            <attach>true</attach>
+                            <appendClassifier>false</appendClassifier>
+                            <addMavenDescriptor>true</addMavenDescriptor>
+                            <injar>${project.build.finalName}.jar</injar>
+                            <injarNotExistsSkip>true</injarNotExistsSkip>
+                            <libs>
+                                <lib>${java.home}/lib/rt.jar</lib>
+                            </libs>
+
+                            <options>
+                                <option>-keepdirectories</option>
+
+                                <option>-target 1.8</option>
+                                <option>-keep public class * {
+                                    public protected *;
+                                    }
+                                </option>
+                                <option>-keepclassmembernames class * {
+                                    java.lang.Class class$(java.lang.String);
+                                    java.lang.Class class$(java.lang.String, boolean);
+                                    }
+                                </option>
+                                <option>-keepclasseswithmembernames,includedescriptorclasses class * {
+                                    native <![CDATA[<methods>]]>;
+                                    }
+                                </option>
+                                <option>-keepclassmembers,allowoptimization enum * {
+                                    public static **[] values();
+                                    public static ** valueOf(java.lang.String);
+                                    }
+                                </option>
+                                <option>-keepclassmembers class * implements java.io.Serializable {
+                                    static final long serialVersionUID;
+                                    private static final java.io.ObjectStreamField[] serialPersistentFields;
+                                    private void writeObject(java.io.ObjectOutputStream);
+                                    private void readObject(java.io.ObjectInputStream);
+                                    java.lang.Object writeReplace();
+                                    java.lang.Object readResolve();
+                                    }
+                                </option>
+                            </options>
+                        </configuration>
                     </execution>
                 </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>net.sf.proguard</groupId>
+                        <artifactId>proguard-base</artifactId>
+                        <version>5.3.3</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>
