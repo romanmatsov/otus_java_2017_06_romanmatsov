@@ -27,7 +27,7 @@
                     <!-- MainClass in mainfest make a executable jar -->
                     <archive>
                         <manifest>
-                            <mainClass>C:\Users\r\otus_java_2017_06\homework2\src\main\java\ru\otus\homework2\target\classes\Main.class</mainClass>
+                            <mainClass>C:\Users\r\otus_java_2017_06\homework2\target\classes\Main.class</mainClass>
                         </manifest>
                     </archive>
 
