@@ -1,7 +1,8 @@
-/**
- * Created by r on 6/12/2017.
- */
+package ru.otus;
 
+/**
+ * Created by r on 6/16/2017.
+ */
 /**
  * VM options -Xmx512m -Xms512m
  * <p>
@@ -39,6 +40,7 @@ public class Main {
             // System.out.println("Starting the loop " + (j+1) + " out of " + numberOfLoops);
 
             Runtime runtime = Runtime.getRuntime();
+            System.gc();
             long memBefore = runtime.totalMemory() - runtime.freeMemory();
             Object[] objects = new Object[size];
             for(int i = 0; i<size; i++){
@@ -47,7 +49,8 @@ public class Main {
             }
             long memAfter = runtime.totalMemory() - runtime.freeMemory();
             sum += (int)((memAfter-memBefore)/size);
-            runtime.gc();
+            System.gc();
+
             try {
                 Thread.sleep(sleepTime);
             } catch (InterruptedException e) {
@@ -61,5 +64,6 @@ public class Main {
     private static class MyClass {
         private int i = 0;
         private long l = 1;
+
     }
 }
